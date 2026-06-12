@@ -43,6 +43,11 @@ export async function deleteWorkout(id: string): Promise<void> {
   if (error) throw error;
 }
 
+export async function deleteLog(id: string): Promise<void> {
+  const { error } = await supabase.from("exercise_logs").delete().eq("id", id);
+  if (error) throw error;
+}
+
 export async function logExercise(
   workoutId: string,
   exerciseId: string,

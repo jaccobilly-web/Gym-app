@@ -346,6 +346,64 @@ h2 {
   font-weight: 600;
 }
 
+.calendar {
+  padding: 12px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border-radius: 8px;
+}
+
+.calendar-day.today {
+  background: var(--border);
+}
+
+.calendar-weekday {
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.calendar-date {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.calendar-emoji {
+  font-size: 0.95rem;
+  min-height: 1.3em;
+  color: var(--muted);
+  letter-spacing: -2px;
+}
+
+.exercise-select.swap {
+  width: 100%;
+  background: var(--bg);
+  color: var(--muted);
+}
+
+.workout-footer {
+  padding: 0 16px 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn.danger {
+  color: var(--red);
+  border-color: var(--red);
+}
+
 code {
   background: var(--bg);
   padding: 2px 6px;

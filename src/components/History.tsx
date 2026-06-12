@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAllLogs, fetchWorkouts } from "../lib/api";
+import { deleteWorkout, fetchAllLogs, fetchWorkouts } from "../lib/api";
 import { exerciseById } from "../lib/exercises";
 import { formatSet } from "../lib/progression";
 import type { ExerciseLog, Workout } from "../lib/types";
@@ -26,6 +26,17 @@ export default function History({ onBack }: Props) {
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, []);
+
+  async function remove(id: string) {
+    if (!window.confirm("Delete this workout and all its logged sets?")) return;
+    try {
+      await deleteWorkout(id);
+      setWorkouts((w) => (w ? w.filter((x) => x.id !== id) : w));
+      setLogs((l) => l.filter((x) => x.workout_id !== id));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  }
 
   return (
     <div className="screen">
@@ -68,6 +79,13 @@ export default function History({ onBack }: Props) {
                   );
                 })}
               </ul>
+            )}
+            {open && (
+              <div className="workout-footer">
+                <button className="btn ghost small danger" onClick={() => remove(w.id)}>
+                  🗑 Delete workout
+                </button>
+              </div>
             )}
           </div>
         );

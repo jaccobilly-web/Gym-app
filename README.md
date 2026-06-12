@@ -6,7 +6,9 @@ Built with React + Vite (deployable on Vercel) and Supabase (auth + Postgres sto
 
 ## Features
 
-- **Smart exercise picker** — never the same muscle group twice in a row, prefers exercises you've done least recently/often, never repeats an exercise within a session.
+- **Smart exercise picker** — never the same muscle group twice in a row, prefers exercises you've done least recently/often, never repeats an exercise within a session. Lower days always open with squat, upper days with bench press (see `ANCHORS` in `src/lib/exercises.ts`), and a dropdown lets you override any suggestion.
+- **Back button** mid-workout to undo the previous exercise and fix typos, and workouts can be deleted from History.
+- **Two-week calendar** on the home screen showing which days you trained and what type.
 - **Progressive overload suggestions** — hit your rep target on all 3 sets and the next session suggests +2.5 kg (or +1 rep / +5 s for bodyweight and timed moves).
 - **Previous achievement + all-time best** shown for every exercise.
 - **90 s rest timer** with vibration on phones.

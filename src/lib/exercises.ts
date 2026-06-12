@@ -21,6 +21,13 @@ export const EXERCISES: Exercise[] = [
   { id: "lat-pulldown", name: "Lateral pulldown", region: "upper", group: "back", family: "pull", kind: "weighted", target: 10, increment: 2.5 },
 ];
 
+/** Fixed opener for each workout type — always offered first */
+export const ANCHORS: Record<WorkoutType, string> = {
+  lower: "squat",
+  upper: "bench-press",
+  full: "squat",
+};
+
 export const exerciseById = (id: string): Exercise | undefined =>
   EXERCISES.find((e) => e.id === id);
 
