@@ -12,6 +12,7 @@ import { ANCHORS, exerciseById, poolFor } from "../lib/exercises";
 import { pickNext } from "../lib/selection";
 import { formatLast, formatSet, suggestTarget } from "../lib/progression";
 import type { Exercise, ExerciseStats, SetResult, Workout, WorkoutType } from "../lib/types";
+import { errMsg } from "../lib/utils";
 import RestTimer from "./RestTimer";
 
 interface Props {
@@ -82,7 +83,7 @@ export default function WorkoutSession({ type, extras, onExit }: Props) {
         setCurrent(first);
         if (first) setInputs(inputsFromSuggestion(first, st));
       } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : String(e));
+        if (!cancelled) setError(errMsg(e));
       }
     })();
     return () => {
@@ -161,7 +162,7 @@ export default function WorkoutSession({ type, extras, onExit }: Props) {
       setEntries(newEntries);
       advance(st, newEntries.map((e) => e.exerciseId), current);
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(errMsg(e));
     } finally {
       setSaving(false);
     }
@@ -193,7 +194,7 @@ export default function WorkoutSession({ type, extras, onExit }: Props) {
       setCurrent(ex);
       setInputs(last.sets ? inputsFromSets(last.sets) : inputsFromSuggestion(ex, st));
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(errMsg(e));
     } finally {
       setSaving(false);
     }

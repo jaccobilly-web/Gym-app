@@ -11,6 +11,7 @@ import {
 import { fetchAllLogs } from "../lib/api";
 import { EXERCISES } from "../lib/exercises";
 import type { Exercise, ExerciseLog } from "../lib/types";
+import { errMsg } from "../lib/utils";
 
 interface Props {
   extras: Exercise[];
@@ -51,7 +52,7 @@ export default function Progress({ extras, onBack }: Props) {
   useEffect(() => {
     fetchAllLogs()
       .then(setLogs)
-      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
+      .catch((e) => setError(errMsg(e)));
   }, []);
 
   const exercise = allExercises.find((e) => e.id === selectedId) ?? allExercises[0];

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { deleteWorkout, fetchAllLogs, fetchWorkouts } from "../lib/api";
+import { errMsg } from "../lib/utils";
 import { exerciseById } from "../lib/exercises";
 import { formatSet } from "../lib/progression";
 import type { Exercise, ExerciseLog, Workout } from "../lib/types";
@@ -25,7 +26,7 @@ export default function History({ extras, onBack }: Props) {
         setWorkouts(w.filter((x) => logged.has(x.id)));
         setLogs(l);
       })
-      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
+      .catch((e) => setError(errMsg(e)));
   }, []);
 
   async function remove(id: string) {
@@ -35,7 +36,7 @@ export default function History({ extras, onBack }: Props) {
       setWorkouts((w) => (w ? w.filter((x) => x.id !== id) : w));
       setLogs((l) => l.filter((x) => x.workout_id !== id));
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(errMsg(e));
     }
   }
 

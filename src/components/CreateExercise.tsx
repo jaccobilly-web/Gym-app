@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from "react";
 import { createCustomExercise } from "../lib/api";
 import type { Exercise, ExerciseKind, Region } from "../lib/types";
+import { errMsg } from "../lib/utils";
 
 interface Props {
   onBack: () => void;
@@ -85,7 +86,7 @@ export default function CreateExercise({ onBack, onCreate }: Props) {
       });
       onCreate(ex);
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(errMsg(e));
       setSaving(false);
     }
   }
