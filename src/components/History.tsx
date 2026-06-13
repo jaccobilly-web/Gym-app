@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { deleteWorkout, fetchAllLogs, fetchWorkouts } from "../lib/api";
 import { exerciseById } from "../lib/exercises";
 import { formatSet } from "../lib/progression";
-import type { ExerciseLog, Workout } from "../lib/types";
+import type { Exercise, ExerciseLog, Workout } from "../lib/types";
 
 interface Props {
+  extras: Exercise[];
   onBack: () => void;
 }
 
 const TYPE_EMOJI: Record<string, string> = { lower: "🦵", upper: "💪", full: "🔥" };
 
-export default function History({ onBack }: Props) {
+export default function History({ extras, onBack }: Props) {
   const [workouts, setWorkouts] = useState<Workout[] | null>(null);
   const [logs, setLogs] = useState<ExerciseLog[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +69,7 @@ export default function History({ onBack }: Props) {
             {open && (
               <ul className="log-list">
                 {wLogs.map((l) => {
-                  const ex = exerciseById(l.exercise_id);
+                  const ex = exerciseById(l.exercise_id, extras);
                   return (
                     <li key={l.id}>
                       <span className="log-name">{ex?.name ?? l.exercise_id}</span>

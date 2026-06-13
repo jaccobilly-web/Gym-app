@@ -9,10 +9,11 @@ import {
   YAxis,
 } from "recharts";
 import { fetchAllLogs } from "../lib/api";
-import { EXERCISES, exerciseById } from "../lib/exercises";
+import { EXERCISES } from "../lib/exercises";
 import type { Exercise, ExerciseLog } from "../lib/types";
 
 interface Props {
+  extras: Exercise[];
   onBack: () => void;
 }
 
@@ -41,7 +42,8 @@ function seriesFor(exercise: Exercise, logs: ExerciseLog[]): Point[] {
     .sort((a, b) => a.ts - b.ts);
 }
 
-export default function Progress({ onBack }: Props) {
+export default function Progress({ extras, onBack }: Props) {
+  const allExercises = useMemo(() => [...EXERCISES, ...extras], [extras]);
   const [logs, setLogs] = useState<ExerciseLog[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState(EXERCISES[0].id);
@@ -52,7 +54,7 @@ export default function Progress({ onBack }: Props) {
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, []);
 
-  const exercise = exerciseById(selectedId)!;
+  const exercise = allExercises.find((e) => e.id === selectedId) ?? allExercises[0];
   const points = useMemo(() => (logs ? seriesFor(exercise, logs) : []), [logs, exercise]);
 
   const primaryKey = exercise.kind === "timed" ? "seconds" : exercise.kind === "reps" ? "reps" : "weight";
@@ -66,7 +68,7 @@ export default function Progress({ onBack }: Props) {
       </header>
 
       <select className="exercise-select" value={selectedId} onChange={(e) => setSelectedId(e.target.value)}>
-        {EXERCISES.map((e) => (
+        {allExercises.map((e) => (
           <option key={e.id} value={e.id}>{e.name}</option>
         ))}
       </select>

@@ -1,5 +1,59 @@
 import { supabase } from "./supabase";
-import type { ExerciseLog, ExerciseStats, SetResult, Workout, WorkoutType } from "./types";
+import type { Exercise, ExerciseKind, ExerciseLog, ExerciseStats, Region, SetResult, Workout, WorkoutType } from "./types";
+
+export async function fetchCustomExercises(): Promise<Exercise[]> {
+  const { data, error } = await supabase
+    .from("custom_exercises")
+    .select("id, name, region, group, family, kind, target, increment")
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((r) => ({
+    id: r.id as string,
+    name: r.name as string,
+    region: r.region as Region,
+    group: r.group as string,
+    family: r.family as string,
+    kind: r.kind as ExerciseKind,
+    target: r.target as number,
+    increment: r.increment as number,
+  }));
+}
+
+export async function createCustomExercise(
+  fields: Omit<Exercise, "id">
+): Promise<Exercise> {
+  const { data: userData } = await supabase.auth.getUser();
+  const { data, error } = await supabase
+    .from("custom_exercises")
+    .insert({
+      user_id: userData.user?.id,
+      name: fields.name,
+      region: fields.region,
+      group: fields.group,
+      family: fields.family,
+      kind: fields.kind,
+      target: fields.target,
+      increment: fields.increment,
+    })
+    .select()
+    .single();
+  if (error) throw error;
+  return {
+    id: data.id as string,
+    name: data.name as string,
+    region: data.region as Region,
+    group: data.group as string,
+    family: data.family as string,
+    kind: data.kind as ExerciseKind,
+    target: data.target as number,
+    increment: data.increment as number,
+  };
+}
+
+export async function deleteCustomExercise(id: string): Promise<void> {
+  const { error } = await supabase.from("custom_exercises").delete().eq("id", id);
+  if (error) throw error;
+}
 
 export async function fetchAllLogs(): Promise<ExerciseLog[]> {
   const { data, error } = await supabase

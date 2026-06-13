@@ -3,10 +3,12 @@ import { supabase } from "../lib/supabase";
 import { fetchAllLogs, fetchWorkouts } from "../lib/api";
 import type { WorkoutType } from "../lib/types";
 
+
 interface Props {
   onStart: (type: WorkoutType) => void;
   onProgress: () => void;
   onHistory: () => void;
+  onCreateExercise: () => void;
 }
 
 const TYPE_EMOJI: Record<string, string> = { lower: "🦵", upper: "💪", full: "🔥" };
@@ -23,7 +25,7 @@ function dayKey(d: Date): string {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
-export default function Home({ onStart, onProgress, onHistory }: Props) {
+export default function Home({ onStart, onProgress, onHistory, onCreateExercise }: Props) {
   const [days, setDays] = useState<Day[] | null>(null);
 
   useEffect(() => {
@@ -109,6 +111,7 @@ export default function Home({ onStart, onProgress, onHistory }: Props) {
       <div className="nav-grid">
         <button className="btn nav" onClick={onProgress}>📈 Progress</button>
         <button className="btn nav" onClick={onHistory}>📋 History</button>
+        <button className="btn nav" style={{ gridColumn: "1 / -1" }} onClick={onCreateExercise}>➕ New exercise</button>
       </div>
     </div>
   );

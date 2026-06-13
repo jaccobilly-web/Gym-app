@@ -16,6 +16,7 @@ import RestTimer from "./RestTimer";
 
 interface Props {
   type: WorkoutType;
+  extras: Exercise[];
   onExit: () => void;
 }
 
@@ -55,8 +56,8 @@ function inputsFromSets(sets: SetResult[]): SetInput[] {
   }));
 }
 
-export default function WorkoutSession({ type, onExit }: Props) {
-  const pool = useMemo(() => poolFor(type), [type]);
+export default function WorkoutSession({ type, extras, onExit }: Props) {
+  const pool = useMemo(() => poolFor(type, extras), [type, extras]);
   const [stats, setStats] = useState<Map<string, ExerciseStats> | null>(null);
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [entries, setEntries] = useState<SessionEntry[]>([]);

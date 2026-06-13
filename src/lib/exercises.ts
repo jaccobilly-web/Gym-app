@@ -28,11 +28,12 @@ export const ANCHORS: Record<WorkoutType, string> = {
   full: "squat",
 };
 
-export const exerciseById = (id: string): Exercise | undefined =>
-  EXERCISES.find((e) => e.id === id);
+export const exerciseById = (id: string, extras: Exercise[] = []): Exercise | undefined =>
+  [...EXERCISES, ...extras].find((e) => e.id === id);
 
-export function poolFor(type: WorkoutType): Exercise[] {
-  if (type === "lower") return EXERCISES.filter((e) => e.region === "lower" || e.region === "core");
-  if (type === "upper") return EXERCISES.filter((e) => e.region === "upper");
-  return EXERCISES;
+export function poolFor(type: WorkoutType, extras: Exercise[] = []): Exercise[] {
+  const all = [...EXERCISES, ...extras];
+  if (type === "lower") return all.filter((e) => e.region === "lower" || e.region === "core");
+  if (type === "upper") return all.filter((e) => e.region === "upper");
+  return all;
 }
