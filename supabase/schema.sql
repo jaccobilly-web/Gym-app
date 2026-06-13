@@ -26,7 +26,7 @@ create table if not exists public.custom_exercises (
   user_id uuid not null references auth.users (id) on delete cascade,
   name text not null,
   region text not null check (region in ('lower', 'core', 'upper')),
-  "group" text not null,
+  muscle_group text not null,
   family text not null,
   kind text not null check (kind in ('weighted', 'reps', 'timed')),
   target int not null,
