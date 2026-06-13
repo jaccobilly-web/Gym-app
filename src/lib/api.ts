@@ -4,7 +4,7 @@ import type { Exercise, ExerciseKind, ExerciseLog, ExerciseStats, Region, SetRes
 export async function fetchCustomExercises(): Promise<Exercise[]> {
   const { data, error } = await supabase
     .from("custom_exercises")
-    .select("id, name, region, muscle_group, family, kind, target, increment")
+    .select("id, name, region, muscle_group, family, kind, target_reps, weight_increment")
     .order("created_at", { ascending: true });
   if (error) throw error;
   return (data ?? []).map((r) => ({
@@ -14,8 +14,8 @@ export async function fetchCustomExercises(): Promise<Exercise[]> {
     group: r.muscle_group as string,
     family: r.family as string,
     kind: r.kind as ExerciseKind,
-    target: r.target as number,
-    increment: r.increment as number,
+    target: r.target_reps as number,
+    increment: r.weight_increment as number,
   }));
 }
 
@@ -32,8 +32,8 @@ export async function createCustomExercise(
       muscle_group: fields.group,
       family: fields.family,
       kind: fields.kind,
-      target: fields.target,
-      increment: fields.increment,
+      target_reps: fields.target,
+      weight_increment: fields.increment,
     })
     .select()
     .single();

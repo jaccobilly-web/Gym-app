@@ -23,14 +23,14 @@ create index if not exists exercise_logs_workout_idx on public.exercise_logs (wo
 
 create table if not exists public.custom_exercises (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users (id) on delete cascade,
+  user_id uuid not null,
   name text not null,
-  region text not null check (region in ('lower', 'core', 'upper')),
+  region text not null,
   muscle_group text not null,
   family text not null,
-  kind text not null check (kind in ('weighted', 'reps', 'timed')),
-  target int not null,
-  increment numeric not null default 0,
+  kind text not null,
+  target_reps int not null,
+  weight_increment numeric not null default 0,
   created_at timestamptz not null default now()
 );
 
