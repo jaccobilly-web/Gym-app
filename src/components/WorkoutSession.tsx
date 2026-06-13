@@ -118,6 +118,20 @@ export default function WorkoutSession({ type, onExit }: Props) {
     if (next) setInputs(inputsFromSuggestion(next, st));
   }
 
+  function handleSetInput(index: number, field: keyof SetInput, value: string) {
+    setInputs((prev) => {
+      const updated = prev.map((s, j) => (j === index ? { ...s, [field]: value } : s));
+      // Mirror to sets 2 & 3 only while they still match the old set 1 value
+      if (index === 0) {
+        const old1 = prev[0][field];
+        return updated.map((s, j) =>
+          j > 0 && prev[j][field] === old1 ? { ...s, [field]: value } : s
+        );
+      }
+      return updated;
+    });
+  }
+
   function switchExercise(id: string) {
     if (!stats) return;
     const ex = exerciseById(id);
@@ -270,9 +284,7 @@ export default function WorkoutSession({ type, onExit }: Props) {
                     min="0"
                     placeholder="kg"
                     value={set.weight}
-                    onChange={(e) =>
-                      setInputs(inputs.map((s, j) => (j === i ? { ...s, weight: e.target.value } : s)))
-                    }
+                    onChange={(e) => handleSetInput(i, "weight", e.target.value)}
                   />
                   <span className="unit">kg ×</span>
                 </>
@@ -284,9 +296,7 @@ export default function WorkoutSession({ type, onExit }: Props) {
                   min="0"
                   placeholder="reps"
                   value={set.reps}
-                  onChange={(e) =>
-                    setInputs(inputs.map((s, j) => (j === i ? { ...s, reps: e.target.value } : s)))
-                  }
+                  onChange={(e) => handleSetInput(i, "reps", e.target.value)}
                 />
               )}
               {current.kind === "timed" && (
@@ -297,9 +307,7 @@ export default function WorkoutSession({ type, onExit }: Props) {
                     min="0"
                     placeholder="seconds"
                     value={set.seconds}
-                    onChange={(e) =>
-                      setInputs(inputs.map((s, j) => (j === i ? { ...s, seconds: e.target.value } : s)))
-                    }
+                    onChange={(e) => handleSetInput(i, "seconds", e.target.value)}
                   />
                   <span className="unit">s / side</span>
                 </>
